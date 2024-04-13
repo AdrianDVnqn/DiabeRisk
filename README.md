@@ -31,7 +31,7 @@ Adrian Della Valentina  | Guillermo Gallo García | Daniel Menendez Gomez | Juan
 * Power BI
 * Trello
 
-### Librerías
+### Python Libraries
 ------------
 * Pandas
 * Scikit Learn
