@@ -2,8 +2,8 @@
 =============
 DiabeRisk combines health and technology to tackle the issue of hospital readmissions in diabetic patients. By using machine learning on patient data we can predict readmissions based on clinical and demographic factors. Additionally, data was analyzed with Power BI to identify key trends and influences. Our goal is to improve diabetes management and patient quality of life by reducing hospital readmissions.
 
--------------
 ### Deploy
+-------------
 [Web App DiabeRisk](http://localhost/ "link title")
 
 
