@@ -110,6 +110,7 @@ elif selection == "Dashboard":
 </script>
     """,
     height=900,
+    width=1800,
     )
 
 
