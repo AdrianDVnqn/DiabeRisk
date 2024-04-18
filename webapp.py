@@ -58,7 +58,7 @@ selection = st.sidebar.radio("Seleccionar página:", ("Portada", "Dashboard", "P
 
 # Mostrar el contenido correspondiente a la selección
 if selection == "Portada":
-    st.title("DiabeRisk")
+    st.image("diaberisk.png")
     st.write("Bienvenido a DiabeRisk. Elija la opción Dashboard para ver datos y visualizaciones, o Predictor para acceder a la herramienta predictora del reingreso de pacientes diabéticos")
 
 elif selection == "Dashboard":
