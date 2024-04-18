@@ -41,8 +41,6 @@ def set_background(png_file, opacity):
 
 set_background("hosp.jpg", 0.5)
 
-st.set_page_config(layout="wide")
-
 # Crear la barra lateral con los botones
 selection = st.sidebar.radio("Seleccionar página:", ("Portada", "Dashboard", "Predictor"))
 
@@ -52,6 +50,7 @@ if selection == "Portada":
     st.write("Bienvenido a DiabeRisk. Elija la opción Dashboard para ver datos y visualizaciones, o Predictor para acceder a la herramienta predictora del reingreso de pacientes diabéticos")
 
 elif selection == "Dashboard":
+    st.set_page_config(layout="wide")
     st.title("Dashboard")
     st.write("Aquí puedes ver datos y visualizaciones de los registros de pacientes.")
 
