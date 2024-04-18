@@ -100,8 +100,8 @@ elif selection == "Dashboard":
     vizElement.parentNode.insertBefore(scriptElement, vizElement);
 </script>
     """,
-    height=850,
-    width=1300,
+    height=830,
+    width=1400,
     )
 
 
