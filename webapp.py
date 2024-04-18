@@ -124,7 +124,7 @@ else:
 
     # Cajas de ingreso de datos para variables numéricas
     for col in numerical_cols:
-        value = st.text_input(col, f"Ingrese el valor de {col}")
+        value = st.text_input(col)
         datos_prediccion[col] = [value]
 
     # Cajas de ingreso de datos para variables categóricas
