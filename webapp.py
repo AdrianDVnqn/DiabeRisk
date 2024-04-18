@@ -18,6 +18,8 @@ categorical_cols = [
     'metformin', 'glimepiride', 'glipizide', 'glyburide', 'pioglitazone', 'rosiglitazone', 'insulin', 'change', 'diabetesMed'
 ]
 
+st.set_page_config(layout="wide")
+
 # Crear DataFrame para guardar los datos ingresados por el usuario
 datos_prediccion = pd.DataFrame(columns=numerical_cols + categorical_cols)
 
@@ -50,7 +52,7 @@ if selection == "Portada":
     st.write("Bienvenido a DiabeRisk. Elija la opción Dashboard para ver datos y visualizaciones, o Predictor para acceder a la herramienta predictora del reingreso de pacientes diabéticos")
 
 elif selection == "Dashboard":
-    st.set_page_config(layout="wide")
+    
     st.title("Dashboard")
     st.write("Aquí puedes ver datos y visualizaciones de los registros de pacientes.")
 
