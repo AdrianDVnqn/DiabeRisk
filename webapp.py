@@ -41,17 +41,14 @@ def set_background(png_file, opacity):
 
 set_background("hosp.jpg", 0.5)
 
-#Pongo la fuente en negro
-st.markdown("<style>body {color: black;}</style>", unsafe_allow_html=True)
-st.markdown("<style>h1 {color: black;}</style>", unsafe_allow_html=True)
-st.markdown("<style>h2 {color: black;}</style>", unsafe_allow_html=True)
-st.markdown("<style>h3 {color: black;}</style>", unsafe_allow_html=True)
-st.markdown("<style>h4 {color: black;}</style>", unsafe_allow_html=True)
-st.markdown("<style>h5 {color: black;}</style>", unsafe_allow_html=True)
-st.markdown("<style>h6 {color: black;}</style>", unsafe_allow_html=True)
-st.markdown("<style>div.Widget.row-widget.stRadio > div{color: black;}</style>", unsafe_allow_html=True)
-st.markdown("<style>.css-1v3fvcr {color: black;}</style>", unsafe_allow_html=True)
-st.markdown("<style>.css-j7fq0y {color: black;}</style>", unsafe_allow_html=True)
+# Eliminar el margen izquierdo
+st.markdown("""
+    <style>
+    .reportview-container .main {
+        padding: 0px;
+    }
+    </style>
+""", unsafe_allow_html=True)
 
 # Crear la barra lateral con los botones
 selection = st.sidebar.radio("Seleccionar página:", ("Portada", "Dashboard", "Predictor"))
