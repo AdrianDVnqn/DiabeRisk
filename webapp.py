@@ -68,7 +68,7 @@ elif selection == "Dashboard":
     # URL de tu dashboard de Tableau
     components.html(
     """
-    <div class='tableauPlaceholder' id='viz1713308822056' style='position: relative'>
+    <div class='tableauPlaceholder' id='viz1713472472192' style='position: relative'>
         <noscript>
             <a href='#'>
                 <img alt='Principal' src='https://public.tableau.com/static/images/Di/DiabeRisk/Principal/1_rss.png' style='border: none' />
@@ -91,7 +91,7 @@ elif selection == "Dashboard":
         </object>
     </div>
     <script type='text/javascript'>
-        var divElement = document.getElementById('viz1713308822056');
+        var divElement = document.getElementById('viz1713472472192');
         var vizElement = divElement.getElementsByTagName('object')[0];
         if ( divElement.offsetWidth > 800 ) {
             vizElement.style.width='1000px';
