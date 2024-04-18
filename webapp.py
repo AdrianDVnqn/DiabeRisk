@@ -41,14 +41,7 @@ def set_background(png_file, opacity):
 
 set_background("hosp.jpg", 0.5)
 
-# Eliminar el margen izquierdo
-st.markdown("""
-    <style>
-    .reportview-container .main {
-        padding: 0px;
-    }
-    </style>
-""", unsafe_allow_html=True)
+st.set_page_config(layout="wide")
 
 # Crear la barra lateral con los botones
 selection = st.sidebar.radio("Seleccionar página:", ("Portada", "Dashboard", "Predictor"))
