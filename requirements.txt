@@ -6,5 +6,4 @@ scikit-learn
 xgboost
 streamlit_option_menu
 streamlit_modal
-#streamlit.components.v1
 streamlit_navigation_bar
