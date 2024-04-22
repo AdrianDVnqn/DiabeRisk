@@ -327,7 +327,7 @@ else:
             st.write(f"**{group}**")
             for col_name in cols:
                 if col_name in numerical_cols:
-                    value = st.number_input(variable_names[col_name], step=1, help=descriptions.get(col_name, "Sin descripción"))
+                    value = st.number_input(variable_names[col_name], step=1, help=descriptions.get(col_name, "Sin descripción"), min_value=0)
                     datos_prediccion[col_name] = [value]
                 elif col_name in categorical_cols:
                     values = df[col_name].unique()
