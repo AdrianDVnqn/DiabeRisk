@@ -336,8 +336,8 @@ else:
 
     # Mostrar el DataFrame de datos del paciente y el botón de predicción
 
-    st.write("Datos del paciente:")
-    st.dataframe(datos_prediccion)
+    #st.write("Datos del paciente:") #Creo que para el deploy ya no vale la pena mostrar esto
+    #st.dataframe(datos_prediccion)
 
     popup = Modal(key="results", title="Resultados")
 
