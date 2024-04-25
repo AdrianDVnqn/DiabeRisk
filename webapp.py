@@ -13,7 +13,7 @@ import numpy as np
 from sklearn.compose import ColumnTransformer
 from sklearn.preprocessing import StandardScaler, OneHotEncoder
 from xgboost import XGBClassifier
-import time
+import io
 
 st.set_page_config(layout="wide")
 
@@ -770,26 +770,29 @@ else:
                     st.download_button(
                        "Presiona para Descargar Archivo CSV 📄",
                        csv,
-                       "resultados.csv",
+                       "diaberisk_resultados.csv",
                        "text/csv",
                        key='download-csv'
                     )
 
-                    @st.experimental_memo
+                    buffer = io.BytesIO()
                     def convert_df_xlsx(df):
                        return df.to_excel(index=False).encode('utf-8')
                     
-                    xlsx = convert_df_xlsx(resultados_df)
-                    
-                    st.download_button(
-                       "Presiona para Descargar Archivo Excel 📊",
-                       xlsx,
-                       "resultados.xlsx",
-                       "text/xlsx",
-                       key='download-excel'
-                    )
+                    # Create a Pandas Excel writer using XlsxWriter as the engine.
+                    with pd.ExcelWriter(buffer, engine='xlsxwriter') as writer:
+                        # Write each dataframe to a different worksheet.
+                        resultados_df.to_excel(writer, sheet_name='Sheet1')
+                        # Close the Pandas Excel writer and output the Excel file to the buffer
+                        writer.save()
 
-                    
+                        st.download_button(
+                            label="Presiona para Descargar Archivo Excel 📊",
+                            data=buffer,
+                            file_name="diaberisk_resultados.xlsx",
+                            mime="application/vnd.ms-excel"
+                        )
+
                     # Agregar un botón para guardar en Excel
                    # if st.button("Guardar en archivo Excel"):
                     #        resultados_df = st.session_state['resultados_df']
