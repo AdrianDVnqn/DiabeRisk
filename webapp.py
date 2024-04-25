@@ -760,6 +760,22 @@ else:
                 with popup_save.container():
                     resultados_df = st.session_state['resultados_df']
                     st.dataframe(resultados_df)
+
+                    @st.experimental_memo
+                    def convert_df(df):
+                       return df.to_csv(index=False).encode('utf-8')
+                    
+                    csv = convert_df(resultados_df)
+                    
+                    st.download_button(
+                       "Presiona para Descargar",
+                       csv,
+                       "resultados.csv",
+                       "text/csv",
+                       key='download-csv'
+                    )
+
+                    
                     # Agregar un botón para guardar en Excel
                     if st.button("Guardar en archivo Excel"):
                             resultados_df = st.session_state['resultados_df']
@@ -768,12 +784,12 @@ else:
                             # Mostrar mensaje de éxito
                             st.write("Datos guardados correctamente en resultados.xlsx")
                     #Para CSV
-                    if st.button("Guardar en archivo .csv"):
-                            resultados_df = st.session_state['resultados_df']
+                   # if st.button("Guardar en archivo .csv"):
+                     #       resultados_df = st.session_state['resultados_df']
                             # Guardar DataFrame en un archivo CSV
-                            resultados_df.to_csv('resultados.csv', index=False)
+                      #      resultados_df.to_csv('resultados.csv', index=False)
                             # Mostrar mensaje de éxito
-                            st.write("Datos guardados correctamente en resultados.csv")
+                      #      st.write("Datos guardados correctamente en resultados.csv")
 
 
 
