@@ -8,6 +8,12 @@ import os
 from streamlit_option_menu import option_menu
 from streamlit_modal import Modal
 from streamlit_navigation_bar import st_navbar
+import shap
+import numpy as np
+from sklearn.compose import ColumnTransformer
+from sklearn.preprocessing import StandardScaler, OneHotEncoder
+from xgboost import XGBClassifier
+import time
 
 st.set_page_config(layout="wide")
 
@@ -46,6 +52,29 @@ selection = st_navbar(
     selected="Portada"
 )
 
+
+def set_background(png_file):
+    with open(png_file, "rb") as file:
+        encoded_string = base64.b64encode(file.read()).decode('utf-8')
+
+    # Definir el estilo CSS para la imagen de fondo
+    page_bg_img = f'''
+    <style>
+    [data-testid="stApp"] {{
+        background-image: url("data:image/png;base64,{encoded_string}");
+        background-size: cover;
+
+    }}
+    </style>
+    '''
+
+    # Aplicar el estilo CSS directamente al cuerpo (body) de la página
+    st.markdown(page_bg_img, unsafe_allow_html=True)
+
+background_image_path = "hosp.jpg"
+background_opacity = 0.2
+set_background(background_image_path)
+
 ## Crear la barra lateral con los botones
 # with st.sidebar:
 #     selection=option_menu(
@@ -57,30 +86,17 @@ selection = st_navbar(
 #     )
 
 
-# #Reducir el espacio en blanco al inicio de la página
-# st.markdown("""
-#         <style>
-#                .block-container {
-#                     padding-top: 2rem;
-#                     padding-bottom: 0rem;
-#                     padding-left: 2rem;
-#                     padding-right: 2rem;
-#                 }
-#         </style>
-#         """, unsafe_allow_html=True)
-
-# # Inject custom CSS to set the width of the sidebar (200 px is the minimum possible)
-# st.markdown(
-#     """
-#     <style>
-#         section[data-testid="stSidebar"] {
-#             width: 200px !important; # Set the width to your desired value
-#         }
-#     </style>
-#     """,
-#     unsafe_allow_html=True,
-# )
-
+#Reducir el espacio en blanco al inicio de la página
+st.markdown("""
+        <style>
+               .block-container {
+                    padding-top: 6rem;
+                    padding-bottom: 0rem;
+                    padding-left: 3rem;
+                    padding-right: 3rem;
+                }
+        </style>
+        """, unsafe_allow_html=True)
 
 # Definir los nombres completos de las variables
 variable_names = {
@@ -110,7 +126,7 @@ variable_names = {
     'pioglitazone': 'Pioglitazona',
     'rosiglitazone': 'Rosiglitazona',
     'insulin': 'Insulina',
-    'change': 'Cambio',
+    'change': 'Cambio en la Medicación de diabetes',
     'diabetesMed': 'Medicamento para la diabetes'
 }
 
@@ -199,6 +215,7 @@ variable_groups = {
     'Resultados de Pruebas': ['max_glu_serum', 'A1Cresult']
 }
 
+
 # Crear DataFrame para guardar los datos ingresados por el usuario
 datos_prediccion = pd.DataFrame(columns=numerical_cols + categorical_cols)
 
@@ -215,7 +232,246 @@ if selection == "Portada":
 #                 }
 #         </style>
 #         """, unsafe_allow_html=True)
-    st.write("Bienvenido a DiabeRisk. Elija la opción Dashboard para ver datos y visualizaciones, o Predictor para acceder a la herramienta predictora del reingreso de pacientes diabéticos")
+    st.subheader("Bienvenido a ⚕️DiabeRisk.")
+    
+# Slideshow de imagenes
+    components.html(
+        """
+    <!DOCTYPE html>
+    <html>
+    <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+    * {box-sizing: border-box;}
+    body {font-family: Verdana, sans-serif;}
+    .mySlides {display: none;}
+
+    img {
+        vertical-align: middle;
+        object-fit: cover;
+        height: 360px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.4); /* Sombra para el efecto de viñeta */
+    }
+    /* Slideshow container */
+    .slideshow-container {
+    max-width: 650px;
+    position: relative;
+    padding: 10px 10px 10px 10px;
+    margin: auto;
+    overflow: hidden;
+    }
+
+    /* Caption text */
+    .text {
+    color: #f2f2f2;
+    font-size: 15px;
+    padding: 0px 12px;
+    position: absolute;
+    bottom: 8px;
+    width: 100%;
+    text-align: center;
+    }
+
+    /* Number text (1/3 etc) */
+    .numbertext {
+    color: #f2f2f2;
+    font-size: 12px;
+    padding: 25px 12px;
+    position: absolute;
+    top: 0;
+    }
+
+    /* The dots/bullets/indicators */
+    .dot {
+    height: 10px;
+    width: 10px;
+    padding: -50px 2px;
+    margin: 0px 2px;
+    background-color: #bbb;
+    border-radius: 50%;
+    display: inline-block;
+    transition: background-color 0.6s ease;
+    }
+
+    .active {
+    background-color: #717171;
+    }
+
+    /* Fading animation */
+    .fade {
+    animation-name: fade;
+    animation-duration: 4s;
+    }
+
+    @keyframes fade {
+    0% { opacity: 0; } /* Comienza invisible */
+    15% { opacity: 1; }
+    50% { opacity: 1; } /* Opacidad máxima a la mitad */
+    85% { opacity: 1; }
+    100% { opacity: 0; } /* Desaparece al final */
+    }
+
+    /* On smaller screens, decrease text size */
+    @media only screen and (max-width: 300px) {
+    .text {font-size: 11px}
+    }
+    </style>
+    </head>
+    <body>
+
+    <div class="slideshow-container">
+
+    <div class="mySlides fade">
+    <div class="numbertext">1 / 4</div>
+    <img src="https://unsplash.com/photos/L8tWZT4CcVQ/download?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MTh8fG1lZGljaW5lfGVzfDB8fHx8MTcxMzg4NDg1MHwy&force=true&w=2400" style="width:100%">
+    <div class="text"></div>
+    </div>
+
+    <div class="mySlides fade">
+    <div class="numbertext">2 / 4</div>
+    <img src="https://unsplash.com/photos/7jjnJ-QA9fY/download?ixid=M3wxMjA3fDB8MXxhbGx8fHx8fHx8fHwxNzE0MDAwMjY3fA&force=true&w=2400" style="width:100%">
+    <div class="text"></div>
+    </div>
+
+    <div class="mySlides fade">
+    <div class="numbertext">3 / 4</div>
+    <img src="https://unsplash.com/photos/NFvdKIhxYlU/download?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MTh8fGRvY3RvcnN8ZXN8MHx8fHwxNzE0MDAyOTYyfDI&force=true&w=2400" style="width:100%">
+    <div class="text"></div>
+    </div>
+
+     <div class="mySlides fade">
+    <div class="numbertext">4 / 4</div>
+    <img src="    https://unsplash.com/photos/zQEmEAb-WpY/download?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MjB8fGhvc3BpdGFsfGVzfDB8fHx8MTcxMzkzNDY5Mnww&force=true&w=2400" style="width:100%">
+    <div class="text"></div>
+    </div>
+
+    </div>
+    <br>
+
+    <div style="text-align:center">
+    <span class="dot"></span> 
+    <span class="dot"></span> 
+    <span class="dot"></span>
+    <span class="dot"></span> 
+    </div>
+
+    <script>
+    let slideIndex = 0;
+    showSlides();
+
+    function showSlides() {
+    let i;
+    let slides = document.getElementsByClassName("mySlides");
+    let dots = document.getElementsByClassName("dot");
+    for (i = 0; i < slides.length; i++) {
+        slides[i].style.display = "none";  
+    }
+    slideIndex++;
+    if (slideIndex > slides.length) {slideIndex = 1}    
+    for (i = 0; i < dots.length; i++) {
+        dots[i].className = dots[i].className.replace(" active", "");
+    }
+    slides[slideIndex-1].style.display = "block";  
+    dots[slideIndex-1].className += " active";
+    setTimeout(showSlides, 4000); // Change image every 4 seconds
+    }
+    </script>
+
+    </body>
+    </html> 
+
+        """,
+        height=460,
+    )
+
+    st.write('Elija la opción Dashboard para ver datos y visualizaciones, o Predictor para acceder a la herramienta predictora del reingreso de pacientes diabéticos.')
+
+    # Crear tres columnas
+    col1, col2, col3 = st.columns(3)
+    
+    # Columna 1
+    with col1:
+        st.subheader("👩🏻‍⚕️ :bar_chart: Analiza")
+        st.write("Analiza los datos de los pacientes según su historial médico.")
+
+    # Columna 2
+    with col2:
+        st.subheader(":computer: :chart_with_upwards_trend: Predice")
+        st.write("Predice la probabilidad de readmisión de los pacientes.")
+
+    # Columna 3
+    with col3:
+        st.subheader(":hospital: :bulb: Optimiza")
+        st.write("Optimiza los recursos hospitalarios según las predicciones realizadas.")
+
+
+    with st.expander("**Acerca de los datos**"):
+        st.write("""
+        El conjunto de datos representa diez años (1999-2008) de atención clínica en 130 hospitales y redes de prestación integradas de EE. UU. 
+                 
+        Cada fila corresponde a los registros hospitalarios de pacientes diagnosticados con diabetes, que se sometieron a análisis de laboratorio, medicamentos y permanecieron hasta 14 días. 
+                 
+        El objetivo es determinar el reingreso temprano del paciente. 
+                 
+        El problema es importante por las siguientes razones: 
+                 
+        A pesar de la evidencia de alta calidad que muestra mejores resultados clínicos para los pacientes diabéticos que reciben diversas intervenciones preventivas y terapéuticas, muchos pacientes no las reciben. Esto puede atribuirse en parte al manejo arbitrario de la diabetes en ambientes hospitalarios, que no atienden el control glucémico. 
+                 
+        No brindar una atención adecuada a la diabetes no solo aumenta los costos de gestión de los hospitales (a medida que los pacientes son readmitidos), sino que también afecta la morbilidad y mortalidad de los pacientes, que pueden enfrentar complicaciones asociadas con la diabetes.
+        
+        """)
+
+        # Crear un enlace a la página de los datos
+        st.markdown("[Fuente](https://archive.ics.uci.edu/dataset/296/diabetes+130-us+hospitals+for+years+1999-2008)")
+
+    with st.expander("**Contexto**"):
+                      
+        team = {
+            "Data Science": {
+                "name": "Adrian Della Valentina",
+                "linkedin": "[![Linkedin](https://img.shields.io/badge/LinkedIn-0A66C2?style=for-the-badge&logo=LinkedIn&logoColor=white)](https://www.linkedin.com/in/adrian-della-valentina/)",
+                "github": "[![Github](https://img.shields.io/badge/GitHub-000?style=for-the-badge&logo=GitHub&logoColor=white)](https://github.com/AdrianDVnqn/)"
+            },
+            "Data Analyst": {
+                "name": "Daniel Menendez Gomez",
+                "linkedin": "[![Linkedin](https://img.shields.io/badge/LinkedIn-0A66C2?style=for-the-badge&logo=LinkedIn&logoColor=white)](enlace/al/que/deseas/ir)",
+                "github": "[![Github](https://img.shields.io/badge/GitHub-000?style=for-the-badge&logo=GitHub&logoColor=white)](enlace/al/que/deseas/ir)"
+            },
+            "ETL Developer": {
+                "name": "Juan Mendoza Lopez",
+                "linkedin": "[![Linkedin](https://img.shields.io/badge/LinkedIn-0A66C2?style=for-the-badge&logo=LinkedIn&logoColor=white)](enlace/al/que/deseas/ir)",
+                "github": "[![Github](https://img.shields.io/badge/GitHub-000?style=for-the-badge&logo=GitHub&logoColor=white)](enlace/al/que/deseas/ir)"
+            },
+            "Analista BI": {
+                "name": "Diego Suárez",
+                "linkedin": "[![Linkedin](https://img.shields.io/badge/LinkedIn-0A66C2?style=for-the-badge&logo=LinkedIn&logoColor=white)](https://www.linkedin.com/in/diego-suarez-escobar/)",
+                "github": "[![Github](https://img.shields.io/badge/GitHub-000?style=for-the-badge&logo=GitHub&logoColor=white)](https://www.linkedin.com/in/diego-suarez-escobar/)"
+            }
+        }
+
+        st.markdown("""
+                 
+        Este proyecto fue realizado en el marco de la simulación laboral organizada por No Country.
+        
+        El grupo C17-77-FT-DATA-BI está conformado por:
+                    
+        Nombre         | Rol | LinkedIn | GitHub
+        ------------- | ------------- | ------------- | -------------
+        Adrian Della Valentina | Data Science | [![LinkedIn](https://img.shields.io/badge/LinkedIn-0A66C2?style=for-the-badge&logo=LinkedIn&logoColor=white)](https://www.linkedin.com/in/adrian-della-valentina/) | [![GitHub](https://img.shields.io/badge/GitHub-000?style=for-the-badge&logo=GitHub&logoColor=white)](https://github.com/AdrianDVnqn/)
+        Guillermo Gallo García | Data Science | [![LinkedIn](https://img.shields.io/badge/LinkedIn-0A66C2?style=for-the-badge&logo=LinkedIn&logoColor=white)](https://www.linkedin.com/in/guillermo-patricio-gallo-garcia-0a3bb3bb/) | [![GitHub](https://img.shields.io/badge/GitHub-000?style=for-the-badge&logo=GitHub&logoColor=white)](https://github.com/Galo0000/)
+        Daniel Menendez Gomez | Data Analyst | [![LinkedIn](https://img.shields.io/badge/LinkedIn-0A66C2?style=for-the-badge&logo=LinkedIn&logoColor=white)](https://www.linkedin.com/in/danielgomz/) | [![GitHub](https://img.shields.io/badge/GitHub-000?style=for-the-badge&logo=GitHub&logoColor=white)](https://github.com/danielGomz/)
+        Juan Mendoza Lopez | ETL Developer | [![LinkedIn](https://img.shields.io/badge/LinkedIn-0A66C2?style=for-the-badge&logo=LinkedIn&logoColor=white)](https://www.linkedin.com/in/juan-mendoza00/) | [![GitHub](https://img.shields.io/badge/GitHub-000?style=for-the-badge&logo=GitHub&logoColor=white)](https://github.com/Juan-Mendoza00/)
+        Diego Suárez | Analista BI | [![LinkedIn](https://img.shields.io/badge/LinkedIn-0A66C2?style=for-the-badge&logo=LinkedIn&logoColor=white)](https://www.linkedin.com/in/diego-suarez-escobar/) | [![GitHub](https://img.shields.io/badge/GitHub-000?style=for-the-badge&logo=GitHub&logoColor=white)](https://github.com/Dsuarezz20/)
+        """)
+
+
+
+########################
+######################## DASHBOARD
+########################
+
+
 
 elif selection == "Dashboard":
     st.write("Aquí puedes ver datos y visualizaciones de los registros de pacientes.")
@@ -269,10 +525,16 @@ elif selection == "Dashboard":
     width=1500,
     )
 
-    # Mostrar la página Predictor
+
+
+#########################
+    #################### PREDICTOR
+########################
+
+
 else:
 
-    # Cargar el DataFrame preprocesado
+        # Cargar el DataFrame
     try:
         df = pd.read_csv('data.csv')
         os.write(1,b'DataFrame cargado correctamente.\n')
@@ -285,30 +547,139 @@ else:
     except Exception as e:
         st.caption(f"Error al cargar el modelo: {e}")
 
+
+    popup_results = Modal(key="results", title="Resultados")
+    popup_save = Modal(key="save", title="Datos Guardados",max_width=3000)
+    popup_excel = Modal(key="excel", title="Excel")
+
+    columnas_resultados = list(variable_names.keys()) + ['readmitted', 'Probabilidad']
+    resultados_df = pd.DataFrame(columns=columnas_resultados)
+    lista_probabilidades = [0.1, 0.2, 0.3]
+    # Inicializar resultados_df en la primera ejecución
+    if 'resultados_df' not in st.session_state:
+        st.session_state['resultados_df'] = pd.DataFrame(columns=['Predicción', 'Probabilidad'])
+
+
+        #Funcion que borra datos
+    def func_delete():
+        for widget_key in categorical_cols:
+            if widget_key in st.session_state:
+                values = df[widget_key].unique()
+                st.session_state[widget_key] = values[0] if len(values) > 0 else None
+        for widget_key in numerical_cols:
+            if widget_key in st.session_state:
+                st.session_state[widget_key] = 0
+
+
     def realizar_prediccion(datos_prediccion, model):
       try:
-          # Verificar si todos los datos necesarios están presentes
-          #if any(pd.isnull(datos_prediccion[numerical_cols])):
-          #  raise ValueError("Es necesario cargar todos los datos para realizar la predicción")
-          # Realizar la predicción
-          prediccion = model.predict(datos_prediccion)[0]
-          probabilidad = model.predict_proba(datos_prediccion)[0][1]  # Probabilidad de la clase positiva (readmisión)
+        # Verificar si todos los datos necesarios están presentes
+        #if any(pd.isnull(datos_prediccion[numerical_cols])):
+        #  raise ValueError("Es necesario cargar todos los datos para realizar la predicción")
+        # Realizar la predicción
+        prediccion = model.predict(datos_prediccion)[0]
+        probabilidad = model.predict_proba(datos_prediccion)[0][1]  # Probabilidad de la clase positiva (readmisión)
+        # Calcular los valores SHAP
+        # Obtener el modelo XGBoost del pipeline
+        modelo_xgb = model.named_steps['classifier']
+        # Preprocesamiento de datos
+        # Escalar características numéricas y convertir características categóricas usando OneHotEncoder
+        preprocessor = ColumnTransformer([
+            ('num', StandardScaler(), numerical_cols),
+            ('cat', OneHotEncoder(drop='first'), categorical_cols)  # drop='first' para evitar la multicolinealidad
+        ])
+
+        # Aplicar el preprocesamiento a X
+        datos_preproc = preprocessor.fit_transform(datos_prediccion)
+        
+        feat_names = ['time_in_hospital', 'num_lab_procedures', 'num_procedures', 'num_medications', 'number_outpatient', 'number_emergency', 'number_inpatient', 'number_diagnoses']
+
+        # Convertir la matriz dispersa a un DataFrame de pandas
+        datos_preproc_df = pd.DataFrame(datos_preproc)
+
+        # Asignar los nuevos nombres de columnas a datos_prediccion
+        datos_preproc_df.columns = feat_names
+
+        # shap.initjs()
+        # explainer = shap.Explainer(modelo_xgb)
+        # shap_values = explainer.shap_values(datos_preproc)
+        # shap.force_plot(explainer.expected_value[0], shap_values[0])
 
           # Mostrar el resultado de la predicción y la probabilidad
-          if prediccion == 1:
-            with popup.container():
+        if prediccion == 1:
+            datos_prediccion['readmitted'] = prediccion
+            datos_prediccion['Probabilidad'] = probabilidad
+            with popup_results.container():
+            #with st.sidebar:
+                lista_probabilidades.append(probabilidad)
                 st.markdown(f"🩺**Predicción: 🚨Hay readmisión del paciente.** Probabilidad: **{probabilidad*100:.1f}%**")
-          else:
-            with popup.container():
+                st.dataframe(datos_prediccion)
+                resultados_df = st.session_state.get('resultados_df', pd.DataFrame())
+                # Concatenar el nuevo resultado al DataFrame existente
+                resultados_df = pd.concat([resultados_df, datos_prediccion], ignore_index=True)
+                # Guardar el DataFrame actualizado en st.session_state
+                st.session_state['resultados_df'] = resultados_df
+                # Mostrar mensaje de éxito
+                st.write("Datos guardados correctamente en resultados_df")
+                    #st.pyplot(shap.plots.force(shap_values[0]))
+                    #st.dataframe(datos_preproc_df)
+                               
+        else:
+            datos_prediccion['readmitted'] = prediccion
+            datos_prediccion['Probabilidad'] = probabilidad
+            with popup_results.container():
+            #with st.sidebar:
                 st.markdown(f"🩺**Predicción:** 🟢No hay readmisión del paciente. Probabilidad: **{probabilidad*100:.1f}%**")
+                # Agregar los resultados a resultados_df
+                st.dataframe(datos_prediccion)
+                resultados_df = st.session_state.get('resultados_df', pd.DataFrame())
+                # Concatenar el nuevo resultado al DataFrame existente
+                resultados_df = pd.concat([resultados_df, datos_prediccion], ignore_index=True)
+                # Guardar el DataFrame actualizado en st.session_state
+                st.session_state['resultados_df'] = resultados_df
+                # Mostrar mensaje de éxito
+                st.write("Datos guardados correctamente en resultados_df")
+                time.sleep(1)
+            #st.pyplot(shap.plots.force(shap_values[0]))
+            #st.dataframe(datos_preproc_df)
       except Exception as e:
-            with popup.container():
+            #with popup_results.container():
+            with st.sidebar:
                 st.markdown(f'⚠️Error al realizar la predicción: {e}')
+
+    # Mostrar el DataFrame de datos del paciente y el botón de predicción
+
+    #st.write("Datos del paciente:")
+    #st.dataframe(datos_prediccion)
+    
+    options = {
+        "show_sidebar": True,
+    }
+
+        # Inject custom CSS to set the width of the sidebar (200 px is the minimum possible)
+    st.markdown(
+        """
+        <style>
+            section[data-testid="stSidebar"] {
+                width: 200px !important; # Set the width to your desired value
+            }
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
+
+        # Crear la barra lateral con los botones
+    with st.sidebar:
+
+        #Botón para borrar datos
+        if st.button("**Borrar Datos**"):
+            func_delete()
 
     st.write("Ingrese a continuación los datos del paciente. Para obtener más información sobre cada campo, coloque el cursor sobre el símbolo de pregunta (?).")
 
     # Dividir la página en columnas
     col1, col2, col3, col4, col5 = st.columns([1, 1, 1, 1, 1])
+
 
     # Cajas de ingreso de datos para variables numéricas y categóricas
     for group, cols in variable_groups.items():
@@ -327,23 +698,87 @@ else:
             st.write(f"**{group}**")
             for col_name in cols:
                 if col_name in numerical_cols:
-                    value = st.number_input(variable_names[col_name], step=1, help=descriptions.get(col_name, "Sin descripción"), min_value=0)
+                    value = st.number_input(variable_names[col_name], step=1, min_value=0, help=descriptions.get(col_name, "Sin descripción"), key=col_name)
                     datos_prediccion[col_name] = [value]
                 elif col_name in categorical_cols:
                     values = df[col_name].unique()
-                    value = st.selectbox(variable_names[col_name], values, help=descriptions.get(col_name, "Sin descripción"))
+                    value = st.selectbox(variable_names[col_name], values, help=descriptions.get(col_name, "Sin descripción"), key=col_name)
                     datos_prediccion[col_name] = [value]
 
-    # Mostrar el DataFrame de datos del paciente y el botón de predicción
 
-    #st.write("Datos del paciente:") #Creo que para el deploy ya no vale la pena mostrar esto
-    #st.dataframe(datos_prediccion)
 
-    popup = Modal(key="results", title="Resultados")
 
-    # Botón para realizar la predicción
-    if st.button("Realizar Predicción"):
-            #popup.open()
-            realizar_prediccion(datos_prediccion, model)
-            
-            
+    # Color de fondo para la barra lateral (en este caso, rojo)
+    sidebar_color = "#FF0000"
+
+    # Aplicar el estilo CSS a la barra lateral
+    st.markdown(
+        f"""
+        <style>
+        .sidebar .sidebar-content {{
+            background-color: {sidebar_color};
+        }}
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
+
+
+    with st.sidebar:
+
+
+
+        s = """
+        <style>
+        div.stButton > button:first-child { 
+            border: 3px solid #42bda1; 
+            border-radius: 15px 15px 15px 15px; 
+            width: 100%;
+            background-color: #a0cdde;
+        }
+        
+        .stButton {
+        display: flex;
+        justify-content: flex-end;
+        }
+        </style>
+        """
+        st.markdown(s, unsafe_allow_html=True)
+
+        # Botón para realizar la predicción
+        if st.button("**Realizar Predicción**"):
+                #popup.open()
+                realizar_prediccion(datos_prediccion, model)
+        
+        st.markdown("#####")
+
+        # Botón para ver dataframe de resultados guardados
+        modal_guardados = st.button("**Datos Guardados**")
+        if modal_guardados:
+                popup_save.open()
+        if popup_save.is_open():
+                with popup_save.container():
+                    resultados_df = st.session_state['resultados_df']
+                    st.dataframe(resultados_df)
+                    # Agregar un botón para guardar en Excel
+                    if st.button("Guardar en archivo Excel"):
+                            resultados_df = st.session_state['resultados_df']
+                            # Guardar DataFrame en un archivo Excel
+                            resultados_df.to_excel('resultados.xlsx', index=False)
+                            # Mostrar mensaje de éxito
+                            st.write("Datos guardados correctamente en resultados.xlsx")
+                    #Para CSV
+                    if st.button("Guardar en archivo .csv"):
+                            resultados_df = st.session_state['resultados_df']
+                            # Guardar DataFrame en un archivo CSV
+                            resultados_df.to_csv('resultados.csv', index=False)
+                            # Mostrar mensaje de éxito
+                            st.write("Datos guardados correctamente en resultados.csv")
+
+
+
+
+        
+        
+
+
