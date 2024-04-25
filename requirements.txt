@@ -7,3 +7,4 @@ xgboost
 streamlit_option_menu
 streamlit_modal
 streamlit_navigation_bar
+shap
