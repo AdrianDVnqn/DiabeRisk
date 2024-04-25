@@ -784,7 +784,7 @@ else:
                         # Write each dataframe to a different worksheet.
                         resultados_df.to_excel(writer, sheet_name='Sheet1')
                         # Close the Pandas Excel writer and output the Excel file to the buffer
-                        writer.save()
+                        writer.close()
 
                         st.download_button(
                             label="Presiona para Descargar Archivo Excel 📊",
