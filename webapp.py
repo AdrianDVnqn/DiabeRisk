@@ -762,27 +762,41 @@ else:
                     st.dataframe(resultados_df)
 
                     @st.experimental_memo
-                    def convert_df(df):
+                    def convert_df_csv(df):
                        return df.to_csv(index=False).encode('utf-8')
                     
-                    csv = convert_df(resultados_df)
+                    csv = convert_df_csv(resultados_df)
                     
                     st.download_button(
-                       "Presiona para Descargar",
+                       "Presiona para Descargar Archivo CSV 📄",
                        csv,
                        "resultados.csv",
                        "text/csv",
                        key='download-csv'
                     )
 
+                    @st.experimental_memo
+                    def convert_df_xlsx(df):
+                       return df.to_excel(index=False).encode('utf-8')
+                    
+                    xlsx = convert_df_xlsx(resultados_df)
+                    
+                    st.download_button(
+                       "Presiona para Descargar Archivo Excel 📊",
+                       xlsx,
+                       "resultados.xlsx",
+                       "text/xlsx",
+                       key='download-excel'
+                    )
+
                     
                     # Agregar un botón para guardar en Excel
-                    if st.button("Guardar en archivo Excel"):
-                            resultados_df = st.session_state['resultados_df']
+                   # if st.button("Guardar en archivo Excel"):
+                    #        resultados_df = st.session_state['resultados_df']
                             # Guardar DataFrame en un archivo Excel
-                            resultados_df.to_excel('resultados.xlsx', index=False)
-                            # Mostrar mensaje de éxito
-                            st.write("Datos guardados correctamente en resultados.xlsx")
+                    #        resultados_df.to_excel('resultados.xlsx', index=False)
+                   #         # Mostrar mensaje de éxito
+                   #         st.write("Datos guardados correctamente en resultados.xlsx")
                     #Para CSV
                    # if st.button("Guardar en archivo .csv"):
                      #       resultados_df = st.session_state['resultados_df']
