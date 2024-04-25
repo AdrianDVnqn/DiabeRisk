@@ -557,7 +557,7 @@ else:
     lista_probabilidades = [0.1, 0.2, 0.3]
     # Inicializar resultados_df en la primera ejecución
     if 'resultados_df' not in st.session_state:
-        st.session_state['resultados_df'] = pd.DataFrame(columns=['Predicción', 'Probabilidad'])
+        st.session_state['resultados_df'] = pd.DataFrame(columns=columnas_resultados)
 
 
         #Funcion que borra datos
