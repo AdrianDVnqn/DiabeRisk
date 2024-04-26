@@ -646,7 +646,7 @@ else:
                 st.session_state['resultados_df'] = resultados_df
                 # Mostrar mensaje de éxito
                 st.write("Datos guardados correctamente en resultados_df")
-                time.sleep(1)
+                #time.sleep(1)
             #st.pyplot(shap.plots.force(shap_values[0]))
             #st.dataframe(datos_preproc_df)
       except Exception as e:
