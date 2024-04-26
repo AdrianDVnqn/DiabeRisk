@@ -555,15 +555,22 @@ else:
 
     columnas_resultados = list(variable_names.keys()) + ['readmitted', 'Probabilidad']
     resultados_df = pd.DataFrame(columns=columnas_resultados)
-    lista_probabilidades = [0.1, 0.2, 0.3]
+
     # Inicializar resultados_df en la primera ejecución
     if 'resultados_df' not in st.session_state:
         st.session_state['resultados_df'] = pd.DataFrame(columns=columnas_resultados)
 
+        #Funcion que borra datos
+    def func_delete():
+        for widget_key in categorical_cols:
+            if widget_key in st.session_state:
+                values = df[widget_key].unique()
+                st.session_state[widget_key] = values[0] if len(values) > 0 else None
+        for widget_key in numerical_cols:
+            if widget_key in st.session_state:
+                st.session_state[widget_key] = 0 if len(values) > 0 else None
 
-
-
-
+    # Función que realiza la predicción
     def realizar_prediccion(datos_prediccion, model):
       try:
         # Verificar si todos los datos necesarios están presentes
@@ -692,17 +699,6 @@ else:
                     values = df[col_name].unique()
                     value = st.selectbox(variable_names[col_name], values, help=descriptions.get(col_name, "Sin descripción"), key=col_name)
                     datos_prediccion[col_name] = [value]
-
-
-        #Funcion que borra datos
-    def func_delete():
-        for widget_key in categorical_cols:
-            if widget_key in st.session_state:
-                values = df[widget_key].unique()
-                st.session_state[widget_key] = values[0] if len(values) > 0 else None
-        for widget_key in numerical_cols:
-            if widget_key in st.session_state:
-                st.session_state[widget_key] = 0 if len(values) > 0 else None
 
     # Color de fondo para la barra lateral (en este caso, rojo)
     sidebar_color = "#FF0000"
