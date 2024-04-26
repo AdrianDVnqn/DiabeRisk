@@ -753,8 +753,8 @@ else:
         #st.markdown("#####")
 
         # Botón para ver dataframe de resultados guardados
-        modal_guardados = st.button("**Historial**")
-        if modal_guardados:
+        #modal_guardados = st.button("**Historial**")
+        if st.button("**Historial**"):
                 popup_save.open()
         if popup_save.is_open():
                 with popup_save.container():
