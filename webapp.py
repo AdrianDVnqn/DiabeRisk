@@ -710,8 +710,6 @@ else:
         div.stButton > button:first-child { 
             border: 3px solid #42bda1; 
             border-radius: 15px 15px 15px 15px; 
-            width: 100%;
-            background-color: #a0cdde;
         }
         
         .stButton {
