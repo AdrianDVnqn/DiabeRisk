@@ -721,9 +721,6 @@ else:
 
 
     with st.sidebar:
-
-
-
         s = """
         <style>
         div.stButton > button:first-child { 
@@ -741,9 +738,10 @@ else:
         """
         st.markdown(s, unsafe_allow_html=True)
 
-
-
-
+        #Botón para borrar datos
+        if st.button("**Borrar Datos**"):
+            func_delete()
+        
         # Botón para realizar la predicción
         if st.button("**Realizar Predicción**"):
                 #popup.open()
@@ -791,25 +789,6 @@ else:
                             file_name="diaberisk_resultados.xlsx",
                             mime="application/vnd.ms-excel"
                         )
-
-        #Botón para borrar datos
-        if st.button("**Borrar Datos**"):
-            func_delete()
-            
-                    # Agregar un botón para guardar en Excel
-                   # if st.button("Guardar en archivo Excel"):
-                    #        resultados_df = st.session_state['resultados_df']
-                            # Guardar DataFrame en un archivo Excel
-                    #        resultados_df.to_excel('resultados.xlsx', index=False)
-                   #         # Mostrar mensaje de éxito
-                   #         st.write("Datos guardados correctamente en resultados.xlsx")
-                    #Para CSV
-                   # if st.button("Guardar en archivo .csv"):
-                     #       resultados_df = st.session_state['resultados_df']
-                            # Guardar DataFrame en un archivo CSV
-                      #      resultados_df.to_csv('resultados.csv', index=False)
-                            # Mostrar mensaje de éxito
-                      #      st.write("Datos guardados correctamente en resultados.csv")
 
 
 
