@@ -18,7 +18,7 @@ import io
 st.set_page_config(page_title="DiabeRisk", page_icon="diaberisk-icon.png", layout="wide")
 
 # Crear el menu superior con los botones
-botones = ['Portada', 'Dashboard', 'Predictor']
+botones = ['Portada', 'Tablero Interactivo', 'Predictor']
 
 styles = {
     "nav": {
@@ -79,7 +79,7 @@ set_background(background_image_path)
 # with st.sidebar:
 #     selection=option_menu(
 #         menu_title="",
-#         options = ['Portada', 'Dashboard', 'Predictor'],
+#         options = ['Tablero Interactivo', 'Predictor'],
 #         icons = ["house-heart-fill", "calendar2-heart-fill","wrench"],
 #         #menu_icon = "hospital-fill",
 #         default_index=0
@@ -234,6 +234,8 @@ if selection == "Portada":
 #         """, unsafe_allow_html=True)
     st.subheader("Bienvenid@ a ⚕️DiabeRisk.", anchor=False)
     
+    st.write('Elija la opción **Tablero Interactivo** para ver datos y visualizaciones, o **Predictor** para acceder a la herramienta predictora del reingreso de pacientes diabéticos.')
+    
 # Slideshow de imagenes
     components.html(
         """
@@ -386,8 +388,6 @@ if selection == "Portada":
         height=460,
     )
 
-    st.write('Elija la opción Dashboard para ver datos y visualizaciones, o Predictor para acceder a la herramienta predictora del reingreso de pacientes diabéticos.')
-
     # Crear tres columnas
     col1, col2, col3 = st.columns(3)
     
@@ -474,7 +474,7 @@ if selection == "Portada":
 
 
 
-elif selection == "Dashboard":
+elif selection == "Tablero Interactivo":
     st.write("Aquí puedes ver datos y visualizaciones de los registros de pacientes.")
 
     # URL de tu dashboard de Tableau
