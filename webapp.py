@@ -393,17 +393,17 @@ if selection == "Portada":
     
     # Columna 1
     with col1:
-        st.subheader("👩🏻‍⚕️ :bar_chart: Analiza")
+        st.subheader("👩🏻‍⚕️ :bar_chart: Analiza", anchor=False)
         st.write("Analiza los datos de los pacientes según su historial médico.")
 
     # Columna 2
     with col2:
-        st.subheader(":computer: :chart_with_upwards_trend: Predice")
+        st.subheader(":computer: :chart_with_upwards_trend: Predice", anchor=False)
         st.write("Predice la probabilidad de readmisión de los pacientes.")
 
     # Columna 3
     with col3:
-        st.subheader(":hospital: :bulb: Optimiza")
+        st.subheader(":hospital: :bulb: Optimiza", anchor=False)
         st.write("Optimiza los recursos hospitalarios según las predicciones realizadas.")
 
 
