@@ -560,6 +560,39 @@ else:
     if 'resultados_df' not in st.session_state:
         st.session_state['resultados_df'] = pd.DataFrame(columns=columnas_resultados)
 
+
+    # Ingreso de datos
+    st.write("Ingrese a continuación los datos del paciente. Para obtener más información sobre cada campo, coloque el cursor sobre el símbolo de pregunta (?).")
+
+    # Dividir la página en columnas
+    col1, col2, col3, col4, col5 = st.columns([1, 1, 1, 1, 1])
+
+
+    # Cajas de ingreso de datos para variables numéricas y categóricas
+    for group, cols in variable_groups.items():
+        if group == 'Medicamentos':
+            col_group = col1
+        elif group == 'Diagnósticos':
+            col_group = col2
+        elif group == 'Información del Paciente':
+            col_group = col3
+        elif group == 'Historial Médico':
+            col_group = col4
+        elif group == 'Resultados de Pruebas':
+            col_group = col5
+
+        with col_group:
+            st.write(f"**{group}**")
+            for col_name in cols:
+                if col_name in numerical_cols:
+                    value = st.number_input(variable_names[col_name], step=1, min_value=0, help=descriptions.get(col_name, "Sin descripción"), key=col_name)
+                    datos_prediccion[col_name] = [value]
+                elif col_name in categorical_cols:
+                    values = df[col_name].unique()
+                    value = st.selectbox(variable_names[col_name], values, help=descriptions.get(col_name, "Sin descripción"), key=col_name)
+                    datos_prediccion[col_name] = [value]
+
+  
         #Funcion que borra datos
     def func_delete():
         for widget_key in categorical_cols:
@@ -743,50 +776,6 @@ else:
             func_delete()
 
 
-    st.write("Ingrese a continuación los datos del paciente. Para obtener más información sobre cada campo, coloque el cursor sobre el símbolo de pregunta (?).")
-
-    # Dividir la página en columnas
-    col1, col2, col3, col4, col5 = st.columns([1, 1, 1, 1, 1])
-
-
-    # Cajas de ingreso de datos para variables numéricas y categóricas
-    for group, cols in variable_groups.items():
-        if group == 'Medicamentos':
-            col_group = col1
-        elif group == 'Diagnósticos':
-            col_group = col2
-        elif group == 'Información del Paciente':
-            col_group = col3
-        elif group == 'Historial Médico':
-            col_group = col4
-        elif group == 'Resultados de Pruebas':
-            col_group = col5
-
-        with col_group:
-            st.write(f"**{group}**")
-            for col_name in cols:
-                if col_name in numerical_cols:
-                    value = st.number_input(variable_names[col_name], step=1, min_value=0, help=descriptions.get(col_name, "Sin descripción"), key=col_name)
-                    datos_prediccion[col_name] = [value]
-                elif col_name in categorical_cols:
-                    values = df[col_name].unique()
-                    value = st.selectbox(variable_names[col_name], values, help=descriptions.get(col_name, "Sin descripción"), key=col_name)
-                    datos_prediccion[col_name] = [value]
-
-    # Color de fondo para la barra lateral (en este caso, rojo)
-    sidebar_color = "#FF0000"
-
-    # Aplicar el estilo CSS a la barra lateral
-    st.markdown(
-        f"""
-        <style>
-        .sidebar .sidebar-content {{
-            background-color: {sidebar_color};
-        }}
-        </style>
-        """,
-        unsafe_allow_html=True
-    )
 
 
  #   with st.sidebar:
