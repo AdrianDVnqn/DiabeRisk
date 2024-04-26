@@ -560,43 +560,7 @@ else:
     if 'resultados_df' not in st.session_state:
         st.session_state['resultados_df'] = pd.DataFrame(columns=columnas_resultados)
 
-              
-    # Ingreso de datos
-    st.write("Ingrese a continuación los datos del paciente. Para obtener más información sobre cada campo, coloque el cursor sobre el símbolo de pregunta (?).")
-
-    #Botón para borrar datos
-    if st.button("**Borrar Datos**"):
-        func_delete()
-        
-    # Dividir la página en columnas
-    col1, col2, col3, col4, col5 = st.columns([1, 1, 1, 1, 1])
-
-    # Cajas de ingreso de datos para variables numéricas y categóricas
-    for group, cols in variable_groups.items():
-        if group == 'Medicamentos':
-            col_group = col1
-        elif group == 'Diagnósticos':
-            col_group = col2
-        elif group == 'Información del Paciente':
-            col_group = col3
-        elif group == 'Historial Médico':
-            col_group = col4
-        elif group == 'Resultados de Pruebas':
-            col_group = col5
-
-        with col_group:
-            st.write(f"**{group}**")
-            for col_name in cols:
-                if col_name in numerical_cols:
-                    value = st.number_input(variable_names[col_name], step=1, min_value=0, help=descriptions.get(col_name, "Sin descripción"), key=col_name)
-                    datos_prediccion[col_name] = [value]
-                elif col_name in categorical_cols:
-                    values = df[col_name].unique()
-                    value = st.selectbox(variable_names[col_name], values, help=descriptions.get(col_name, "Sin descripción"), key=col_name)
-                    datos_prediccion[col_name] = [value]
-
-    
-                #Funcion que borra datos
+    #Funcion que borra datos
     def func_delete():
         for widget_key in categorical_cols:
             if widget_key in st.session_state:
@@ -606,8 +570,6 @@ else:
             if widget_key in st.session_state:
                 st.session_state[widget_key] = 0
   
-
-
     # Función que realiza la predicción
     def realizar_prediccion(datos_prediccion, model):
       try:
@@ -684,7 +646,42 @@ else:
             #with popup_results.container():
             with st.sidebar:
                 st.markdown(f'⚠️Error al realizar la predicción: {e}')
+         
+    # Ingreso de datos
+    st.write("Ingrese a continuación los datos del paciente. Para obtener más información sobre cada campo, coloque el cursor sobre el símbolo de pregunta (?).")
 
+    #Botón para borrar datos
+    if st.button("**Borrar Datos**"):
+        func_delete()
+        
+    # Dividir la página en columnas
+    col1, col2, col3, col4, col5 = st.columns([1, 1, 1, 1, 1])
+
+    # Cajas de ingreso de datos para variables numéricas y categóricas
+    for group, cols in variable_groups.items():
+        if group == 'Medicamentos':
+            col_group = col1
+        elif group == 'Diagnósticos':
+            col_group = col2
+        elif group == 'Información del Paciente':
+            col_group = col3
+        elif group == 'Historial Médico':
+            col_group = col4
+        elif group == 'Resultados de Pruebas':
+            col_group = col5
+
+        with col_group:
+            st.write(f"**{group}**")
+            for col_name in cols:
+                if col_name in numerical_cols:
+                    value = st.number_input(variable_names[col_name], step=1, min_value=0, help=descriptions.get(col_name, "Sin descripción"), key=col_name)
+                    datos_prediccion[col_name] = [value]
+                elif col_name in categorical_cols:
+                    values = df[col_name].unique()
+                    value = st.selectbox(variable_names[col_name], values, help=descriptions.get(col_name, "Sin descripción"), key=col_name)
+                    datos_prediccion[col_name] = [value]
+
+    
     # Mostrar el DataFrame de datos del paciente y el botón de predicción
 
     #st.write("Datos del paciente:")
