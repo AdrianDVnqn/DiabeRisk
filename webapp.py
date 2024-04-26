@@ -552,6 +552,7 @@ else:
     popup_results = Modal(key="results", title="Resultados")
     popup_save = Modal(key="save", title="Historial",max_width=3000)
     popup_excel = Modal(key="excel", title="Excel")
+    popup_clear = Modal(key="clear", title="Borrar Datos",max_width=500)
 
     columnas_resultados = list(variable_names.keys()) + ['readmitted', 'Probabilidad']
     resultados_df = pd.DataFrame(columns=columnas_resultados)
@@ -650,9 +651,16 @@ else:
     # Ingreso de datos
     st.write("Ingrese a continuación los datos del paciente. Para obtener más información sobre cada campo, coloque el cursor sobre el símbolo de pregunta (?).")
 
-    #Botón para borrar datos
-    if st.button("**Borrar Datos**"):
-        func_delete()
+    #Borrar datos ingresados
+    # Botón para ver dataframe de resultados guardados
+    modal_clear = st.button("**Borrar Datos Ingresados**")
+    if modal_clear:
+            popup_clear.open()
+    if popup_clear.is_open():
+            with popup_save.container():
+                st.write("¿Desea borrar los datos ingresados? No podrán ser recuperados.
+                if st.button("**Confirmar el borrado**"):
+                    func_delete()
         
     # Dividir la página en columnas
     col1, col2, col3, col4, col5 = st.columns([1, 1, 1, 1, 1])
