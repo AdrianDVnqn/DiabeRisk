@@ -232,7 +232,7 @@ if selection == "Portada":
 #                 }
 #         </style>
 #         """, unsafe_allow_html=True)
-    st.subheader("Bienvenido a ⚕️DiabeRisk.")
+    st.subheader("Bienvenid@ a ⚕️DiabeRisk.", anchor=False)
     
 # Slideshow de imagenes
     components.html(
