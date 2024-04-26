@@ -750,7 +750,7 @@ else:
         if st.button("**Borrar Datos**"):
             func_delete()
         
-        st.markdown("#####")
+        #st.markdown("#####")
 
         # Botón para ver dataframe de resultados guardados
         modal_guardados = st.button("**Historial**")
