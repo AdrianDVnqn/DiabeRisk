@@ -644,7 +644,7 @@ else:
             datos_prediccion['Probabilidad'] = probabilidad
             with popup_results.container():
             #with st.sidebar:
-                lista_probabilidades.append(probabilidad)
+
                 st.markdown(f"🩺**Predicción: 🚨Hay readmisión del paciente.** Probabilidad: **{probabilidad*100:.1f}%**")
                 st.dataframe(datos_prediccion)
                 resultados_df = st.session_state.get('resultados_df', pd.DataFrame())
