@@ -569,8 +569,8 @@ else:
                 st.session_state[widget_key] = values[0] if len(values) > 0 else None
         for widget_key in numerical_cols:
             if widget_key in st.session_state:
-                st.session_state[widget_key] = 0 if len(values) > 0 else None
-
+                st.session_state[widget_key] = 0
+                
     # Ingreso de datos
     st.write("Ingrese a continuación los datos del paciente. Para obtener más información sobre cada campo, coloque el cursor sobre el símbolo de pregunta (?).")
 
