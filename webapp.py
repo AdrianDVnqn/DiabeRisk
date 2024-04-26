@@ -561,15 +561,7 @@ else:
         st.session_state['resultados_df'] = pd.DataFrame(columns=columnas_resultados)
 
 
-        #Funcion que borra datos
-    def func_delete():
-        for widget_key in categorical_cols:
-            if widget_key in st.session_state:
-                values = df[widget_key].unique()
-                st.session_state[widget_key] = values[0] if len(values) > 0 else None
-        for widget_key in numerical_cols:
-            if widget_key in st.session_state:
-                st.session_state[widget_key] = 0 if len(values) > 0 else None
+
 
 
     def realizar_prediccion(datos_prediccion, model):
@@ -702,7 +694,15 @@ else:
                     datos_prediccion[col_name] = [value]
 
 
-
+        #Funcion que borra datos
+    def func_delete():
+        for widget_key in categorical_cols:
+            if widget_key in st.session_state:
+                values = df[widget_key].unique()
+                st.session_state[widget_key] = values[0] if len(values) > 0 else None
+        for widget_key in numerical_cols:
+            if widget_key in st.session_state:
+                st.session_state[widget_key] = 0 if len(values) > 0 else None
 
     # Color de fondo para la barra lateral (en este caso, rojo)
     sidebar_color = "#FF0000"
@@ -740,6 +740,9 @@ else:
         </style>
         """
         st.markdown(s, unsafe_allow_html=True)
+
+
+
 
         # Botón para realizar la predicción
         if st.button("**Realizar Predicción**"):
@@ -789,9 +792,10 @@ else:
                             mime="application/vnd.ms-excel"
                         )
 
-            #Botón para borrar datos
+        #Botón para borrar datos
         if st.button("**Borrar Datos**"):
             func_delete()
+            
                     # Agregar un botón para guardar en Excel
                    # if st.button("Guardar en archivo Excel"):
                     #        resultados_df = st.session_state['resultados_df']
