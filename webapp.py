@@ -738,6 +738,9 @@ else:
                     resultados_df = st.session_state['resultados_df']
                     st.dataframe(resultados_df)
 
+                    if st.button("**Borrar Historial**"):
+                        st.session_state['resultados_df'] = pd.DataFrame(columns=columnas_resultados)
+                    
                     @st.experimental_memo
                     def convert_df_csv(df):
                        return df.to_csv(index=False).encode('utf-8')
@@ -745,7 +748,7 @@ else:
                     csv = convert_df_csv(resultados_df)
                     
                     st.download_button(
-                       "Presiona para Descargar Archivo CSV 📄",
+                       "Descargar como Archivo CSV 📄",
                        csv,
                        "diaberisk_resultados.csv",
                        "text/csv",
@@ -764,7 +767,7 @@ else:
                         writer.close()
 
                         st.download_button(
-                            label="Presiona para Descargar Archivo Excel 📊",
+                            label="Descargar como Archivo Excel 📊",
                             data=buffer,
                             file_name="diaberisk_resultados.xlsx",
                             mime="application/vnd.ms-excel"
