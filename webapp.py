@@ -18,7 +18,7 @@ import io
 st.set_page_config(page_title="DiabeRisk", page_icon="diaberisk-icon.png", layout="wide")
 
 # Crear el menu superior con los botones
-botones = ['Portada', 'Tablero Interactivo', 'Predictor']
+botones = ['Tablero Interactivo', 'Predictor']
 
 styles = {
     "nav": {
@@ -48,8 +48,8 @@ selection = st_navbar(
     styles=styles,
     options=options,
     logo_path='diaberisk-logo.svg',
-    logo_page="Portada",
-    selected="Portada"
+    logo_page="Inicio",
+    selected="Inicio"
 )
 
 
@@ -220,7 +220,7 @@ variable_groups = {
 datos_prediccion = pd.DataFrame(columns=numerical_cols + categorical_cols)
 
 # Mostrar el contenido correspondiente a la selección
-if selection == "Portada":
+if selection == "Inicio":
     # #Reducir el espacio en blanco al inicio de la página
 # st.markdown("""
 #         <style>
