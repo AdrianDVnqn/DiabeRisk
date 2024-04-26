@@ -342,7 +342,7 @@ if selection == "Portada":
 
      <div class="mySlides fade">
     <div class="numbertext">4 / 4</div>
-    <img src="    https://unsplash.com/photos/zQEmEAb-WpY/download?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MjB8fGhvc3BpdGFsfGVzfDB8fHx8MTcxMzkzNDY5Mnww&force=true&w=2400" style="width:100%">
+    <img src="https://plus.unsplash.com/premium_photo-1682130277144-423d6b582e56?q=80&w=2664&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" style="width:100%">
     <div class="text"></div>
     </div>
 
