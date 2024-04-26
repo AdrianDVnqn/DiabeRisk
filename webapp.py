@@ -730,7 +730,7 @@ else:
                     csv = convert_df_csv(resultados_df)
                     
                     st.download_button(
-                       "Descargar como Archivo CSV 📄",
+                       "**Descargar como Archivo CSV** 📄",
                        csv,
                        "diaberisk_resultados.csv",
                        "text/csv",
@@ -749,7 +749,7 @@ else:
                         writer.close()
 
                         st.download_button(
-                            label="Descargar como Archivo Excel 📊",
+                            label="**Descargar como Archivo Excel** 📊",
                             data=buffer,
                             file_name="diaberisk_resultados.xlsx",
                             mime="application/vnd.ms-excel"
