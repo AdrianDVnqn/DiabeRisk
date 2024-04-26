@@ -656,18 +656,23 @@ else:
         "show_sidebar": True,
     }
 
-        # Inject custom CSS to set the width of the sidebar (200 px is the minimum possible)
-    st.markdown(
-        """
-        <style>
-            section[data-testid="stSidebar"] {
-                width: 200px !important; # Set the width to your desired value
-            }
-        </style>
-        """,
-        unsafe_allow_html=True,
-    )
+    with st.sidebar:
 
+            # Inject custom CSS to set the width of the sidebar (200 px is the minimum possible)
+        st.markdown(
+            """
+            <style>
+                section[data-testid="stSidebar"] {
+                    width: 200px !important; # Set the width to your desired value
+                }
+            </style>
+            """,
+            unsafe_allow_html=True,
+        )
+
+            #Botón para borrar datos
+        if st.button("**Borrar Datos**"):
+            func_delete()
 
 
     st.write("Ingrese a continuación los datos del paciente. Para obtener más información sobre cada campo, coloque el cursor sobre el símbolo de pregunta (?).")
@@ -733,11 +738,7 @@ else:
         </style>
         """
         st.markdown(s, unsafe_allow_html=True)
-
-        #Botón para borrar datos
-        if st.button("**Borrar Datos**"):
-            func_delete()
-        
+      
         # Botón para realizar la predicción
         if st.button("**Realizar Predicción**"):
                 #popup.open()
