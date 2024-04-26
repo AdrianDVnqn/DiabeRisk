@@ -564,9 +564,12 @@ else:
     # Ingreso de datos
     st.write("Ingrese a continuación los datos del paciente. Para obtener más información sobre cada campo, coloque el cursor sobre el símbolo de pregunta (?).")
 
+    #Botón para borrar datos
+    if st.button("**Borrar Datos**"):
+        func_delete()
+        
     # Dividir la página en columnas
     col1, col2, col3, col4, col5 = st.columns([1, 1, 1, 1, 1])
-
 
     # Cajas de ingreso de datos para variables numéricas y categóricas
     for group, cols in variable_groups.items():
@@ -594,8 +597,14 @@ else:
 
     
                 #Funcion que borra datos
-    #def func_delete():
-
+    def func_delete():
+        for widget_key in categorical_cols:
+            if widget_key in st.session_state:
+                values = df[widget_key].unique()
+                st.session_state[widget_key] = values[0] if len(values) > 0 else None
+        for widget_key in numerical_cols:
+            if widget_key in st.session_state:
+                st.session_state[widget_key] = 0
   
 
 
@@ -767,16 +776,7 @@ else:
             unsafe_allow_html=True,
         )
 
-            #Botón para borrar datos
-        if st.button("**Borrar Datos**"):
-            #func_delete()
-            for widget_key in categorical_cols:
-                if widget_key in st.session_state:
-                    values = df[widget_key].unique()
-                    st.session_state[widget_key] = values[0] if len(values) > 0 else None
-            for widget_key in numerical_cols:
-                if widget_key in st.session_state:
-                    st.session_state[widget_key] = 0
+
 
 
 
