@@ -658,10 +658,12 @@ else:
             popup_clear.open()
     if popup_clear.is_open():
             with popup_save.container():
-                st.write("¿Desea borrar los datos ingresados? No podrán ser recuperados.
+                st.write("¿Desea borrar los datos ingresados? No podrán ser recuperados.")
                 if st.button("**Confirmar el borrado**"):
                     func_delete()
-        
+
+
+    
     # Dividir la página en columnas
     col1, col2, col3, col4, col5 = st.columns([1, 1, 1, 1, 1])
 
