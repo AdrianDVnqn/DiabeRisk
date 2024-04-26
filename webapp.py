@@ -550,7 +550,7 @@ else:
 
 
     popup_results = Modal(key="results", title="Resultados")
-    popup_save = Modal(key="save", title="Datos Guardados",max_width=3000)
+    popup_save = Modal(key="save", title="Historial",max_width=3000)
     popup_excel = Modal(key="excel", title="Excel")
 
     columnas_resultados = list(variable_names.keys()) + ['readmitted', 'Probabilidad']
@@ -621,7 +621,7 @@ else:
                 # Guardar el DataFrame actualizado en st.session_state
                 st.session_state['resultados_df'] = resultados_df
                 # Mostrar mensaje de éxito
-                st.write("Datos guardados correctamente en resultados_df")
+                st.write("Datos guardados correctamente en el Historial")
                     #st.pyplot(shap.plots.force(shap_values[0]))
                     #st.dataframe(datos_preproc_df)
                                
@@ -639,7 +639,7 @@ else:
                 # Guardar el DataFrame actualizado en st.session_state
                 st.session_state['resultados_df'] = resultados_df
                 # Mostrar mensaje de éxito
-                st.write("Datos guardados correctamente en resultados_df")
+                st.write("Datos guardados correctamente en el Historial")
                 #time.sleep(1)
             #st.pyplot(shap.plots.force(shap_values[0]))
             #st.dataframe(datos_preproc_df)
@@ -669,12 +669,7 @@ else:
         unsafe_allow_html=True,
     )
 
-        # Crear la barra lateral con los botones
-    with st.sidebar:
 
-        #Botón para borrar datos
-        if st.button("**Borrar Datos**"):
-            func_delete()
 
     st.write("Ingrese a continuación los datos del paciente. Para obtener más información sobre cada campo, coloque el cursor sobre el símbolo de pregunta (?).")
 
@@ -750,11 +745,15 @@ else:
         if st.button("**Realizar Predicción**"):
                 #popup.open()
                 realizar_prediccion(datos_prediccion, model)
+      
+        #Botón para borrar datos
+        if st.button("**Borrar Datos**"):
+            func_delete()
         
         st.markdown("#####")
 
         # Botón para ver dataframe de resultados guardados
-        modal_guardados = st.button("**Datos Guardados**")
+        modal_guardados = st.button("**Historial**")
         if modal_guardados:
                 popup_save.open()
         if popup_save.is_open():
