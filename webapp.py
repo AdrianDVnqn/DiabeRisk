@@ -560,17 +560,7 @@ else:
     if 'resultados_df' not in st.session_state:
         st.session_state['resultados_df'] = pd.DataFrame(columns=columnas_resultados)
 
-
-            #Funcion que borra datos
-    def func_delete():
-        for widget_key in categorical_cols:
-            if widget_key in st.session_state:
-                values = df[widget_key].unique()
-                st.session_state[widget_key] = values[0] if len(values) > 0 else None
-        for widget_key in numerical_cols:
-            if widget_key in st.session_state:
-                st.session_state[widget_key] = 0
-                
+              
     # Ingreso de datos
     st.write("Ingrese a continuación los datos del paciente. Para obtener más información sobre cada campo, coloque el cursor sobre el símbolo de pregunta (?).")
 
@@ -602,6 +592,16 @@ else:
                     value = st.selectbox(variable_names[col_name], values, help=descriptions.get(col_name, "Sin descripción"), key=col_name)
                     datos_prediccion[col_name] = [value]
 
+    
+                #Funcion que borra datos
+    def func_delete():
+        for widget_key in categorical_cols:
+            if widget_key in st.session_state:
+                values = df[widget_key].unique()
+                st.session_state[widget_key] = values[0] if len(values) > 0 else None
+        for widget_key in numerical_cols:
+            if widget_key in st.session_state:
+                st.session_state[widget_key] = 0
   
 
 
