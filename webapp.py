@@ -561,6 +561,16 @@ else:
         st.session_state['resultados_df'] = pd.DataFrame(columns=columnas_resultados)
 
 
+            #Funcion que borra datos
+    def func_delete():
+        for widget_key in categorical_cols:
+            if widget_key in st.session_state:
+                values = df[widget_key].unique()
+                st.session_state[widget_key] = values[0] if len(values) > 0 else None
+        for widget_key in numerical_cols:
+            if widget_key in st.session_state:
+                st.session_state[widget_key] = 0 if len(values) > 0 else None
+
     # Ingreso de datos
     st.write("Ingrese a continuación los datos del paciente. Para obtener más información sobre cada campo, coloque el cursor sobre el símbolo de pregunta (?).")
 
@@ -593,15 +603,7 @@ else:
                     datos_prediccion[col_name] = [value]
 
   
-        #Funcion que borra datos
-    def func_delete():
-        for widget_key in categorical_cols:
-            if widget_key in st.session_state:
-                values = df[widget_key].unique()
-                st.session_state[widget_key] = values[0] if len(values) > 0 else None
-        for widget_key in numerical_cols:
-            if widget_key in st.session_state:
-                st.session_state[widget_key] = 0 if len(values) > 0 else None
+
 
     # Función que realiza la predicción
     def realizar_prediccion(datos_prediccion, model):
