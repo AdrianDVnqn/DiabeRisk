@@ -703,22 +703,6 @@ else:
     }
 
     with st.sidebar:
-
-
-        s = """
-        <style>
-        div.stButton > button:first-child { 
-            border: 3px solid #42bda1; 
-            border-radius: 15px 15px 15px 15px; 
-        }
-        
-        .stButton {
-        display: flex;
-        justify-content: flex-end;
-        }
-        </style>
-        """
-        st.markdown(s, unsafe_allow_html=True)
       
         # Botón para realizar la predicción
         if st.button("**Realizar Predicción**"):
