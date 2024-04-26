@@ -594,14 +594,8 @@ else:
 
     
                 #Funcion que borra datos
-    def func_delete():
-        for widget_key in categorical_cols:
-            if widget_key in st.session_state:
-                values = df[widget_key].unique()
-                st.session_state[widget_key] = values[0] if len(values) > 0 else None
-        for widget_key in numerical_cols:
-            if widget_key in st.session_state:
-                st.session_state[widget_key] = 0
+    #def func_delete():
+
   
 
 
@@ -775,8 +769,14 @@ else:
 
             #Botón para borrar datos
         if st.button("**Borrar Datos**"):
-            func_delete()
-
+            #func_delete()
+            for widget_key in categorical_cols:
+                if widget_key in st.session_state:
+                    values = df[widget_key].unique()
+                    st.session_state[widget_key] = values[0] if len(values) > 0 else None
+            for widget_key in numerical_cols:
+                if widget_key in st.session_state:
+                    st.session_state[widget_key] = 0
 
 
 
