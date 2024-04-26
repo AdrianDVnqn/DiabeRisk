@@ -657,10 +657,11 @@ else:
     if modal_clear:
             popup_clear.open()
     if popup_clear.is_open():
-            with popup_save.container():
+            with popup_clear.container():
                 st.write("¿Desea borrar los datos ingresados? No podrán ser recuperados.")
                 if st.button("**Confirmar el borrado**"):
                     func_delete()
+                    popup_clear.close()
 
 
     
