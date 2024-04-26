@@ -331,7 +331,6 @@ if selection == "Portada":
     <div class="mySlides fade">
     <div class="numbertext">2 / 4</div>
     <img src="https://plus.unsplash.com/premium_photo-1682130277144-423d6b582e56?q=80&w=2664&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" style="width:100%">
-
     <div class="text"></div>
     </div>
 
@@ -340,14 +339,15 @@ if selection == "Portada":
     <img src="https://unsplash.com/photos/L8tWZT4CcVQ/download?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MTh8fG1lZGljaW5lfGVzfDB8fHx8MTcxMzg4NDg1MHwy&force=true&w=2400" style="width:100%">
     <div class="text"></div>
     </div>
-    <img src="https://unsplash.com/photos/7jjnJ-QA9fY/download?ixid=M3wxMjA3fDB8MXxhbGx8fHx8fHx8fHwxNzE0MDAwMjY3fA&force=true&w=2400" style="width:100%">
-     <div class="mySlides fade">
+    
+    <div class="mySlides fade">
     <div class="numbertext">4 / 4</div>
-
+    <img src="https://unsplash.com/photos/7jjnJ-QA9fY/download?ixid=M3wxMjA3fDB8MXxhbGx8fHx8fHx8fHwxNzE0MDAwMjY3fA&force=true&w=2400" style="width:100%">
     <div class="text"></div>
     </div>
 
     </div>
+    
     <br>
 
     <div style="text-align:center">
