@@ -569,7 +569,7 @@ else:
                 st.session_state[widget_key] = values[0] if len(values) > 0 else None
         for widget_key in numerical_cols:
             if widget_key in st.session_state:
-                st.session_state[widget_key] = 0
+                st.session_state[widget_key] = 0 if len(values) > 0 else None
 
 
     def realizar_prediccion(datos_prediccion, model):
