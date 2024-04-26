@@ -746,15 +746,11 @@ else:
                 #popup.open()
                 realizar_prediccion(datos_prediccion, model)
       
-        #Botón para borrar datos
-        if st.button("**Borrar Datos**"):
-            func_delete()
-        
-        #st.markdown("#####")
+        st.markdown("#####")
 
         # Botón para ver dataframe de resultados guardados
-        #modal_guardados = st.button("**Historial**")
-        if st.button("**Historial**"):
+        modal_guardados = st.button("**Historial**")
+        if modal_guardados:
                 popup_save.open()
         if popup_save.is_open():
                 with popup_save.container():
@@ -793,6 +789,9 @@ else:
                             mime="application/vnd.ms-excel"
                         )
 
+            #Botón para borrar datos
+        if st.button("**Borrar Datos**"):
+            func_delete()
                     # Agregar un botón para guardar en Excel
                    # if st.button("Guardar en archivo Excel"):
                     #        resultados_df = st.session_state['resultados_df']
