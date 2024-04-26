@@ -15,13 +15,7 @@ from sklearn.preprocessing import StandardScaler, OneHotEncoder
 from xgboost import XGBClassifier
 import io
 
-st.set_page_config(layout="wide")
-
-st.set_page_config(
-    page_title="DiabeRisk",
-    page_icon="diaberisk.svg",
-    }
-)
+st.set_page_config(page_title="DiabeRisk", page_icon="diaberisk.svg", layout="wide")
 
 # Crear el menu superior con los botones
 botones = ['Portada', 'Dashboard', 'Predictor']
