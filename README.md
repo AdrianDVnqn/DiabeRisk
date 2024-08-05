@@ -4,7 +4,7 @@ DiabeRisk combines health and technology to tackle the issue of hospital readmis
 
 ### Deploy
 -------------
-[Web App DiabeRisk](http://diaberisk.streamlit.app "DiabeRisk")
+[Web App DiabeRisk](http://diabe-risk.streamlit.app "DiabeRisk")
 
 
 ### Features
